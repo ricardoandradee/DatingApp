@@ -33,9 +33,19 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
 import { ListsResolver } from './_resolvers/lists.resolver';
 import { MessagesResolver } from './_resolvers/messages.resolver';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { HammerGestureConfig } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
+}
+
+export class CustomHammerConfig extends HammerGestureConfig  {
+   overrides = {
+       pinch: { enable: false },
+       rotate: { enable: false }
+   };
 }
 
 @NgModule({
@@ -67,6 +77,7 @@ export function tokenGetter() {
       RouterModule.forRoot(appRoutes),
       NgxGalleryModule,
       FileUploadModule,
+      BrowserAnimationsModule,
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,
@@ -86,7 +97,8 @@ export function tokenGetter() {
       MemberEditResolver,
       PreventUnsavedChanges,
       ListsResolver,
-      MessagesResolver
+      MessagesResolver,
+      {provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
    ],
    bootstrap: [
       AppComponent
